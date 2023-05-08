@@ -1,7 +1,7 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CommentIcon from '@mui/icons-material/Comment';
-import { Box } from '@mui/material';
+import { Box, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { INewsCard } from '../../types';
@@ -14,6 +14,8 @@ interface NewsCardProps {
   page?: boolean;
 }
 const NewsCard: React.FC<NewsCardProps> = ({ news, page = false }) => {
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down(360));
   const navigate = useNavigate();
   const date = formatDate(news.time * 1000);
   const getNewsById = (id: number) => navigate(`/${id}`);
@@ -49,8 +51,15 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, page = false }) => {
         </Box>
         {page && (
           <S.BackButton to={'/'}>
-            <ArrowBackIosNewIcon sx={{ ...typographySizes.title }} />
-            Back
+            {sm ? (
+              <Tooltip arrow title="Back">
+                <ArrowBackIosNewIcon sx={{ ...typographySizes.title, fontWeight: 600, fontSize: '30px' }} />
+              </Tooltip>
+            ) : (
+              <>
+                <ArrowBackIosNewIcon sx={{ ...typographySizes.title }} /> Back
+              </>
+            )}
           </S.BackButton>
         )}
       </S.CardBox>
