@@ -5,6 +5,7 @@ import Comments from '../components/Comments/comments';
 import ErrorBox from '../components/Error/error';
 import Loader from '../components/Loader/loader';
 import NewsCard from '../components/NewsCard/news-card';
+import Refresh from '../components/refresh/refresh';
 
 const NewsPage = () => {
   const { pathname } = useLocation();
@@ -12,21 +13,30 @@ const NewsPage = () => {
   const { data, isLoading, isError } = useQuery(['singleNews', id], () => fetchNewsById(id), {
     keepPreviousData: true,
   });
-  const { data: comments } = useQuery(['comments', id], () => fetchComments(id), {
-    keepPreviousData: true,
+  const {
+    data: comments,
+    isLoading: commentsLoading,
+    refetch,
+    remove,
+  } = useQuery([`comments-${id}`], () => fetchComments(id), {
+    // keepPreviousData: true,
+    enabled: false,
   });
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <Loader />;
 
-  if (isError) return <ErrorBox />
+  if (isError) return <ErrorBox />;
 
   return (
-    <div>
+    <>
       <NewsCard news={data} page />
-      {comments?.map(({ data }) =>
-        <Comments comment={data} key={data.id} />
+      <Refresh refetch={refetch} remove={remove} title='I refresh comments' />
+      {commentsLoading ? (
+        <Loader />
+      ) : (
+        comments?.map(({ data }) => <Comments comment={data} key={data.id} />)
       )}
-    </div>
+    </>
   );
 };
 export default NewsPage;
