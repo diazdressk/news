@@ -29,16 +29,5 @@ export const CommentReply = styled(Box)(({ }) => ({
 export const CommentText = styled(Box)(({ }) => ({
   paddingLeft: '20px',
   whiteSpace: 'normal',
-  '& pre ': {
-    whiteSpace: 'normal',
-  },
-  '& code': {
-    whiteSpace: 'normal',
-  },
-  '& a': {
-    whiteSpace: 'pre-wrap',
-  },
-  '& p': {
-    whiteSpace: 'normal',
-  },
+  wordBreak: 'break-all',
 }));
